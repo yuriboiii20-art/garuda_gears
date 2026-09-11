@@ -1,4 +1,4 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { pages, profile, company } from '../src/data/site.js';
 
@@ -140,7 +140,9 @@ test('reduced motion disables autoplay and keyboard can operate navigation', asy
 });
 
 test('Pause works on the first pointer interaction and Play restarts rotation', async ({ page }) => {
-  await page.clock.install();
+  const time = new Date('2026-09-11T12:00:00Z');
+  await page.clock.install({ time });
+  await page.clock.pauseAt(time);
   await page.goto('/');
   await page.getByRole('button', { name: 'Pause slideshow' }).click();
   await page.locator('header').hover();
@@ -168,7 +170,15 @@ test('capture desktop and mobile for visual review', async ({ page }) => {
   await page.locator('.slide.is-active img').waitFor({ state: 'visible' });
   await expect(page.locator('.slide.is-active img')).toHaveClass('is-loaded');
   await page.screenshot({ path: '.reference/garuda-desktop.png', fullPage: true });
+  await page.screenshot({ path: '.reference/garuda-desktop-fold.png', fullPage: false });
   await page.setViewportSize({ width: 375, height: 812 });
   await page.screenshot({ path: '.reference/garuda-mobile.png', fullPage: true });
+  await page.screenshot({ path: '.reference/garuda-mobile-fold.png', fullPage: false });
+  await page.evaluate(() => window.scrollBy(0, 650));
+  await page.screenshot({ path: '.reference/garuda-mobile-scrolled.png', fullPage: false });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await page.locator('#main-menu').waitFor({ state: 'visible' });
+  await page.screenshot({ path: '.reference/garuda-drawer.png' });
 });
 

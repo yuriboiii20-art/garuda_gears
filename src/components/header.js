@@ -17,6 +17,10 @@ export function header(currentPath) {
         <img class="brand-oval" src="/images/logo/garuda-oval.svg" alt="GG oval emblem" width="93" height="61" />
         <a class="header-email" href="mailto:${company.email}">${icon('mail')}<span>${company.email}</span></a>
       </div>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="main-menu" aria-label="Menu">
+        ${icon('menu')}
+        <span class="sr-only">Menu</span>
+      </button>
     </div>
     ${navigation(currentPath)}
   </header>`;
