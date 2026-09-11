@@ -67,5 +67,6 @@ export const images = {
     { src: outdoorTeam, alt: 'Team wearing hard hats outside the building entrance', label: 'Slider Image 29' },
     { src: machineOperator, alt: 'Operator wearing a white hard hat at a light-colored industrial machine', label: 'Slider Image 30' },
   ],
-  factory: { src: null, alt: '', label: 'Factory Image' },
+  founder: { src: '/images/founder.jpg', alt: 'GARUDA GEARS Founder', label: 'Founder' },
+  factory: { src: '/images/founder.jpg', alt: 'GARUDA GEARS Founder', label: 'Founder' },
 };
