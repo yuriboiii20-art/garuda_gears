@@ -15,7 +15,7 @@ export function homePage() {
           ${profile.paragraphs.map(text => `<p>${text}</p>`).join('')}
           <a class="text-link" href="/machineries/">View Machineries ${icon('arrow')}</a>
         </div>
-        <figure class="factory-figure">${imageSlot(images.factory, 'factory-slot')}<figcaption><span>GARUDA GEARS</span><span>Factory Image</span></figcaption></figure>
+        <figure class="factory-figure">${imageSlot(images.founder || images.factory, 'factory-slot', true)}<figcaption><span>GARUDA GEARS</span><span>Founder</span></figcaption></figure>
       </div>
     </section>`;
 }
