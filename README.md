@@ -1,52 +1,81 @@
 # GARUDA GEARS
 
-A responsive, original corporate website built with vanilla JavaScript and CSS, with Vite for development and builds. No production dependencies, external fonts, stock photographs, or generated images.
+A responsive, high-performance corporate website built with vanilla JavaScript and CSS, with Vite for development and multi-page static builds. No production framework dependencies, external fonts, stock photographs, or generated images.
 
-## Run
+## Features
+
+- **Automated Hero Carousel**: 30 high-resolution workshop, machinery, gear, and team photographs. Auto-advances every 1 second with smooth 300ms transitions, scroll-tracking indicator strip, pause/play controls, arrow key navigation, and automatic reduced-motion handling.
+- **Mobile Slide Drawer Navigation**: Responsive slide-out navigation menu for mobile viewports (<900px) with hamburger toggle button, backdrop overlay, focus trap, Escape key handling, and full ARIA accessibility attributes.
+- **Company Profile & Founder Spotlight**: Formatted profile section featuring the founder photograph with an optimized portrait aspect ratio, responsive centering, and authentic manufacturing details.
+- **SVG Brand Assets**: Scalable vector recreations of the blue gear-and-rack and red GG oval emblems, with authentic company typography and dual phone/telefax contact information.
+- **Static Multi-Page Generation**: Builds dedicated static `index.html` files for all ten routes to ensure direct URL navigation works seamlessly without SPA server rewrite requirements.
+
+## Quick Start
+
+### Run locally
 
 ```sh
 npm install
 npm run dev
 ```
 
-## Build and preview
+### Build and preview
 
 ```sh
 npm run build
 npm run preview
 ```
 
-Deploy the `dist` directory to static hosting at the domain root. The build emits an `index.html` for each of the ten routes, so direct URLs work without a single-page-app rewrite. The host can use `dist/404.html` for unknown URLs.
+Deploy the generated `dist` directory to any static hosting provider at the domain root. The build emits an `index.html` for each of the ten routes, so direct URLs work cleanly without a single-page-app rewrite. The host can use `dist/404.html` for unknown URLs.
 
-## Add photographs
+## Project Structure & Components
 
-1. Put assets in `public/images/logo/`, `slider/`, `factory/`, `products/`, or `gallery/`.
-2. Open `src/data/images.js`.
-3. Replace `src: null` with a path such as `src: '/images/slider/production-floor.webp'` and set meaningful `alt` text describing the actual photograph.
-4. Rebuild. The placeholder is hidden when the image loads; failed images retain their labeled placeholder.
+- `src/data/site.js`: Site metadata, phone/fax contacts, and route definitions.
+- `src/data/images.js`: Slider image catalog, founder photograph mapping, and fallback placeholders.
+- `src/components/`:
+  - `header.js`: Top contact bar, scalable brand emblems, company tagline, and mobile menu toggle button.
+  - `navigation.js`: Desktop navigation bar and mobile slide drawer menu with backdrop and accessibility controls.
+  - `carousel.js`: Hero image slider with autoplay, manual controls, keyboard navigation, and indicator strip.
+  - `footer.js`: Footer contact details, address, navigation links, and copyright notice.
+  - `images.js`: Reusable image slot helper with loading state and fallback placeholders.
+  - `icons.js`: Scalable SVG icon components (phone, email, fax, location, arrows, play, pause, menu, close).
+- `src/pages/home.js`: Main Home page layout with hero carousel and company profile section.
+- `src/pages/placeholder.js`: Standard template for secondary and 404 pages.
+- `src/styles.css`: Complete CSS design system, typography tokens, responsive breakpoints, drawer animations, and layout grids.
 
-The thirty slider photographs were selected from the user's shared Google Drive folder to show different subjects: team, exterior, workshop, machinery, operator, inspection, gear assembly, helical gears, worm gear, and office. Local copies, served by Drive at up to 1600 pixels wide, are imported from `src/assets/images/drive/` in `src/data/images.js`. Original filenames and Drive links are recorded in that directory's `sources.json`. The website makes no runtime requests to Google Drive.
+## Asset Management
 
-Slider photos and the logo use `object-fit: contain` to preserve the full image. The Lorenz photograph remains the carousel's dark blue background, referenced in `src/styles.css`. Slot dimensions stay fixed while images load or slides change. All thirty slider images begin loading immediately so the one-second rotation does not wait for lazy loading. The indicator strip scrolls to keep the active dot visible on desktop and mobile. Adding another slider object automatically adds its controls and count. Products and gallery directories are reserved; those pages remain unpopulated.
+### Slider & Gallery Photographs
+The thirty slider photographs were selected from the shared Google Drive archive to highlight workshop operations: team, exterior, workshop, machinery, operator, inspection, gear assembly, helical gears, worm gear, and office.
+- Local copies (up to 1600px wide) are imported from `src/assets/images/drive/` into `src/data/images.js`.
+- Original filenames and source Drive links are recorded in `src/assets/images/drive/sources.json`.
+- The website operates entirely offline with zero runtime requests to external services.
 
-## Content and components
+### Founder & Factory Images
+- The founder photograph is located at `public/images/founder.jpg` and mapped in `src/data/images.js`.
+- Rendered with an optimized portrait aspect ratio (`0.85`), centered focal alignment (`object-position: center 15%`), and responsive layout behavior.
 
-- `src/data/site.js`: supplied text and ordered route definitions.
-- `src/components/`: header, navigation, carousel, footer, and shared image rendering.
-- `src/pages/home.js`: populated Home page only.
-- `src/pages/placeholder.js`: shared empty page and not-found structures.
-- `src/styles.css`: colors, layout, and responsive breakpoints.
+### Adding New Photographs
+1. Place image files in `public/images/` (`logo/`, `slider/`, `factory/`, `products/`, or `gallery/`).
+2. Update `src/data/images.js` to reference the image path and provide descriptive `alt` text.
+3. Rebuild the application. The placeholder automatically hides once the image loads.
 
-The supplied header screenshot is represented by scalable SVG recreations of its blue gear-and-rack and red GG oval emblems, with a red serif company name. The manufacturing description, office phone (28397578), and Tele Fax (41171467) are transcribed from that screenshot. No area or country code has been inferred. Email, address, and website remain from the previously supplied text. The screenshot's 1250mm header description and the previously supplied 2500mm profile wording are both preserved as supplied. The factory photograph slot remains available for a future image.
+## Interaction & Accessibility
 
-## Interaction and accessibility
+- **Slideshow Autoplay & Controls**: Carousel advances every 1 second and loops through all 30 photos. Pause button, keyboard focus, or manual slide selection pauses playback until Play is clicked. Reduced-motion settings automatically disable autoplay.
+- **Keyboard Navigation**: Left and right arrow keys navigate carousel slides. Hidden slides are omitted from tab navigation.
+- **Mobile Navigation Drawer**: Toggleable menu with `aria-expanded` and `aria-controls` attributes, backdrop click dismissal, Escape key listener, and visible focus indicators.
+- **History & Routing**: Navigation uses standard anchor tags supporting browser history, right-click context menus, and multi-tab browsing.
 
-The carousel advances every 1 second and loops through all thirty photographs, including while the pointer is over the carousel. Each transition lasts 300ms. The Pause control, keyboard focus, or manual slide selection pauses rotation until Play is chosen. Reduced-motion settings disable autoplay initially. Previous/next, dots, and left/right arrow keys are supported. Hidden slides are removed from accessibility navigation. The mobile menu supports Escape and has visible focus indicators. Navigation uses ordinary links and supports browser history and opening in new tabs.
-
-## Verification
+## Testing & Verification
 
 ```sh
 npm test
 ```
 
-Tests use locally installed Chrome through Playwright. If Chrome is unavailable, install a Playwright browser and adjust `channel` in `playwright.config.js`. Tests cover all routes, viewports from 320 to 1920 pixels, mobile navigation, keyboard controls, autoplay, pause behavior, reduced motion, content, and console errors.
+Automated end-to-end and regression tests are powered by Playwright:
+- **Responsive Viewport Coverage**: Tests layout integrity across 320px, 375px, 390px, 768px, 1024px, 1280px, 1440px, and 1920px widths.
+- **Mobile Drawer Menu**: Validates slide drawer opening, closing, backdrop dismiss, and navigation link interactions.
+- **Carousel Mechanics**: Asserts 1-second interval rotation, manual slide navigation, pause/play toggles, and prefers-reduced-motion behavior.
+- **Visual Regression Snapshots**: Captures full-page, above-the-fold, scrolled, and mobile drawer screenshots in `.reference/`.
+- **Route & Content Integrity**: Validates all 10 routes and confirms zero browser console errors or failed network requests.
