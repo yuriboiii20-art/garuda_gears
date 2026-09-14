@@ -3,6 +3,7 @@ import { images } from '../data/images.js';
 import { carousel } from '../components/carousel.js';
 import { imageSlot } from '../components/image.js';
 import { icon } from '../components/icons.js';
+import { productsSection } from '../components/products-section.js';
 
 export function homePage() {
   return `${carousel()}
@@ -17,5 +18,7 @@ export function homePage() {
         </div>
         <figure class="factory-figure">${imageSlot(images.founder || images.factory, 'factory-slot', true)}<figcaption><span>GARUDA GEARS</span><span>Founder</span></figcaption></figure>
       </div>
-    </section>`;
+    </section>
+    ${productsSection()}`;
 }
+

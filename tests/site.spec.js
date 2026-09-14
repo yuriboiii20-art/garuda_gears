@@ -39,7 +39,7 @@ test('all ten ordered routes work directly and only Home is populated', async ({
     const response = await page.goto(route.path);
     expect(response.status()).toBe(200);
     await expect(page).toHaveTitle(`${route.title} | GARUDA GEARS`);
-    await expect(page.locator('#main-menu a')).toHaveText(pages.map(item => item.title));
+    await expect(page.locator('#main-menu > li > a')).toHaveText(pages.map(item => item.title));
     await expect(page.locator('#main-menu [aria-current="page"]')).toHaveText(route.title);
     expect(await readFile(`dist${route.path}index.html`, 'utf8')).toContain(`<title>${route.title} | GARUDA GEARS</title>`);
     if (route.path !== '/') {
