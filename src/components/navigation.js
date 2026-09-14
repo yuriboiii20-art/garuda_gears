@@ -57,6 +57,14 @@ export function initializeNavigation() {
     nav.classList.toggle('is-open', open);
     menu.classList.toggle('is-open', open);
     document.body.classList.toggle('drawer-open', open);
+    if (!open) {
+      // Close any open mobile dropdowns when drawer closes
+      document.querySelectorAll('.nav-item-has-dropdown').forEach(item => {
+        item.classList.remove('is-expanded');
+        item.classList.remove('is-active');
+        item.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+      });
+    }
   };
 
   toggle.addEventListener('click', (e) => {
@@ -86,18 +94,21 @@ export function initializeNavigation() {
         setOpen(false);
         toggle.focus();
       }
-      // Close any open desktop dropdowns
+      // Close dropdowns
       document.querySelectorAll('.nav-item-has-dropdown').forEach(item => {
         item.classList.remove('is-active');
+        item.classList.remove('is-expanded');
         item.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
       });
     }
   });
 
-  // Handle dropdown interactions
+  // Handle dropdown interactions (desktop hover & mobile click)
   const dropdownItem = document.querySelector('.nav-item-has-dropdown');
   const dropdownTrigger = document.querySelector('.nav-dropdown-trigger');
+  
   if (dropdownItem && dropdownTrigger) {
+    // Desktop hover events
     dropdownTrigger.addEventListener('mouseenter', () => {
       if (!mobile.matches) {
         dropdownItem.classList.add('is-active');
@@ -111,11 +122,27 @@ export function initializeNavigation() {
         dropdownTrigger.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Mobile click event on Products: toggle dropdown
+    dropdownTrigger.addEventListener('click', (e) => {
+      if (mobile.matches) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isExpanded = dropdownItem.classList.contains('is-expanded');
+        dropdownItem.classList.toggle('is-expanded', !isExpanded);
+        dropdownTrigger.setAttribute('aria-expanded', String(!isExpanded));
+      }
+    });
   }
 
+  // Handle link clicks inside menu
   menu.querySelectorAll('a').forEach(link => {
+    // Skip the trigger on mobile as it's handled separately
+    if (link.classList.contains('nav-dropdown-trigger')) {
+      return;
+    }
+
     link.addEventListener('click', (e) => {
-      // If clicking a product anchor link like /#rack-and-pinion on the home page
       const href = link.getAttribute('href');
       if (href && (href.startsWith('/#') || href.startsWith('#'))) {
         const targetId = href.replace('/#', '').replace('#', '');
@@ -138,6 +165,11 @@ export function initializeNavigation() {
   mobile.addEventListener('change', (e) => {
     if (!e.matches) {
       setOpen(false);
+      document.querySelectorAll('.nav-item-has-dropdown').forEach(item => {
+        item.classList.remove('is-expanded');
+        item.classList.remove('is-active');
+        item.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+      });
     }
   });
 }

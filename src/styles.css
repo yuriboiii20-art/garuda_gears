@@ -300,7 +300,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   pointer-events: none;
 }
 .nav-item-has-dropdown:hover .nav-dropdown-trigger::after,
-.nav-item-has-dropdown.is-active .nav-dropdown-trigger::after {
+.nav-item-has-dropdown:focus-within .nav-dropdown-trigger::after,
+.nav-item-has-dropdown.is-active .nav-dropdown-trigger::after,
+.nav-item-has-dropdown.is-expanded .nav-dropdown-trigger::after {
   transform: translateY(-50%) rotate(180deg);
   color: #fff;
 }
@@ -572,6 +574,31 @@ h1, h2 { font-size: 30px; line-height: 1.3; font-weight: 700; color: var(--blue)
   color: #cde4f7;
   margin-top: 2px;
   line-height: 1.4;
+}
+
+.product-card-media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 280px;
+  background: #001a35;
+  background: linear-gradient(180deg, #001428 0%, #002244 100%);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover .product-card-img {
+  transform: scale(1.04);
 }
 
 .product-card-body {
@@ -1053,8 +1080,8 @@ h1, h2 { font-size: 30px; line-height: 1.3; font-weight: 700; color: var(--blue)
   .navigation-list a {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
     min-height: 48px;
     padding: 12px 16px;
@@ -1064,6 +1091,7 @@ h1, h2 { font-size: 30px; line-height: 1.3; font-weight: 700; color: var(--blue)
     border-radius: 4px;
     border: 1.5px solid transparent;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
+    text-align: center;
   }
   .navigation-list > li > a:hover {
     background: rgba(255, 255, 255, 0.12);
@@ -1081,29 +1109,68 @@ h1, h2 { font-size: 30px; line-height: 1.3; font-weight: 700; color: var(--blue)
     color: #6eb7ed;
   }
 
-  /* Mobile Submenu */
+  /* Mobile Products Dropdown */
+  .nav-item-has-dropdown {
+    width: 100%;
+  }
+  .nav-dropdown-trigger {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    cursor: pointer;
+    text-align: center !important;
+    padding: 12px 16px !important;
+    position: relative !important;
+  }
   .nav-dropdown-trigger::after {
-    display: none;
+    content: '▾';
+    position: static !important;
+    font-size: 13px;
+    color: #83c6f2;
+    margin-left: 0 !important;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s;
+    pointer-events: none;
+    display: inline-block;
+  }
+  .nav-item-has-dropdown.is-expanded .nav-dropdown-trigger::after,
+  .nav-item-has-dropdown.is-active .nav-dropdown-trigger::after {
+    transform: rotate(180deg);
+    color: #ffffff;
   }
   .nav-dropdown {
     position: static;
-    display: flex !important;
-    opacity: 1 !important;
-    transform: none !important;
-    pointer-events: auto !important;
-    background: rgba(0, 0, 0, 0.22);
+    display: none !important;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    background: rgba(0, 18, 42, 0.45);
     border: none;
-    border-left: 2px solid var(--accent);
-    box-shadow: none;
-    border-radius: 0 0 4px 4px;
-    margin: 4px 6px 8px 16px;
+    border-left: 3px solid var(--accent);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 0 0 6px 6px;
+    margin: 2px 4px 8px 12px;
     padding: 4px 0;
     min-width: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .nav-item-has-dropdown.is-expanded .nav-dropdown,
+  .nav-item-has-dropdown.is-active .nav-dropdown {
+    display: flex !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
   }
   .nav-product-link {
-    min-height: 48px !important;
-    padding: 10px 14px !important;
-    font-size: 13.5px !important;
+    min-height: 44px !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+  }
+  .nav-product-link:hover,
+  .nav-product-link:active {
+    background: rgba(57, 169, 229, 0.18) !important;
+    color: #ffffff !important;
   }
 
   .drawer-footer {
