@@ -17,17 +17,30 @@ for (const width of [320, 375, 390, 768, 1024, 1280, 1440, 1920]) {
       await page.getByRole('button', { name: /^Menu/ }).click();
       await expect(page.locator('#main-menu')).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-      for (const link of await page.locator('#main-menu a').all()) {
+      // Main menu top-level links are visible
+      for (const link of await page.locator('#main-menu > li > a').all()) {
         const bounds = await link.boundingBox();
         expect(bounds.height).toBeGreaterThanOrEqual(44);
         expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
       }
+      // Products dropdown is initially collapsed on mobile
+      await expect(page.locator('.nav-dropdown')).toBeHidden();
+      // Clicking Products in mobile burger menu reveals the dropdown
+      await page.locator('.nav-dropdown-trigger').click();
+      await expect(page.locator('.nav-dropdown')).toBeVisible();
+      for (const link of await page.locator('.nav-dropdown a').all()) {
+        const bounds = await link.boundingBox();
+        expect(bounds.height).toBeGreaterThanOrEqual(44);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+      }
+      // Pressing Escape closes drawer
       await page.keyboard.press('Escape');
       await expect(page.locator('#main-menu')).toBeHidden();
       await expect(page.locator('.menu-toggle')).toBeFocused();
+      // Reopening drawer and clicking regular link navigates properly
       await page.locator('.menu-toggle').click();
-      await page.locator('#main-menu').getByRole('link', { name: 'Products', exact: true }).click();
-      await expect(page).toHaveURL(/\/products\/$/);
+      await page.locator('#main-menu').getByRole('link', { name: 'Company Profile', exact: true }).click();
+      await expect(page).toHaveURL(/\/company-profile\/$/);
       await expect(page.getByText('Content will be added later.')).toBeVisible();
     }
     expect(errors).toEqual([]);
